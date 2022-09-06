@@ -6,6 +6,7 @@ typedef enum {
     INST_PUSH,
     INST_ADD,
     INST_PRINT,
+    INST_TRAVERSE,
 } Inst_type;
 
 typedef struct {
@@ -16,6 +17,7 @@ typedef struct {
 Inst program[] = {
     {.type = INST_PUSH, .operand = 35},
     {.type = INST_PUSH, .operand = 34},
+    {.type = INST_TRAVERSE},
     {.type = INST_ADD},
     {.type = INST_PRINT},
 };
@@ -34,6 +36,15 @@ void stack_push(int value){
 int stack_pop(void){
     assert(stack_size > 0);
     return stack[--stack_size];
+}
+
+void stack_traverse(){
+    assert(stack_size > 0);
+
+    printf("TRAVERSING STACK\n");
+    for(size_t sp = 0; sp<stack_size; ++sp){
+        printf("%d\n",stack[sp]);
+    }
 }
 
 void save_program_to_file(const char *file_path){
@@ -58,6 +69,10 @@ int main(){
             break;
             case INST_PRINT:
                 printf("%d\n", stack_pop());
+                break;
+            case INST_TRAVERSE:
+                stack_traverse();
+                break;
             default:
                 assert(0 && "Invalid instruction");
         }
